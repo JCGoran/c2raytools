@@ -40,8 +40,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'c2raytools'
-copyright = u'2013, Hannes Jensen'
+project = 'c2raytools'
+copyright = '2013, Hannes Jensen'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -183,8 +183,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'c2raytools.tex', u'c2raytools Documentation',
-   u'Hannes Jensen', 'manual'),
+  ('index', 'c2raytools.tex', 'c2raytools Documentation',
+   'Hannes Jensen', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -213,8 +213,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'c2raytools', u'c2raytools Documentation',
-     [u'Hannes Jensen'], 1)
+    ('index', 'c2raytools', 'c2raytools Documentation',
+     ['Hannes Jensen'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -227,8 +227,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'c2raytools', u'c2raytools Documentation',
-   u'Hannes Jensen', 'c2raytools', 'One line description of project.',
+  ('index', 'c2raytools', 'c2raytools Documentation',
+   'Hannes Jensen', 'c2raytools', 'One line description of project.',
    'Miscellaneous'),
 ]
 

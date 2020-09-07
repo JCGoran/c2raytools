@@ -9,53 +9,53 @@ for compatibility reasons
 
 import numpy as np
 import os
-from lightcone import redshifts_at_equal_comoving_distance, _get_interp_slice
-from xfrac_file import XfracFile
-from density_file import DensityFile
-from helper_functions import print_msg, get_dens_redshifts, get_mesh_size, \
+from .lightcone import redshifts_at_equal_comoving_distance, _get_interp_slice
+from .xfrac_file import XfracFile
+from .density_file import DensityFile
+from .helper_functions import print_msg, get_dens_redshifts, get_mesh_size, \
     determine_redshift_from_filename, get_data_and_type, read_cbin, save_cbin
-from temperature import calc_dt
-import smoothing
+from .temperature import calc_dt
+from . import smoothing
 
 def freq_box(xfrac_dir, dens_dir, z_low, z_high):
-    ''' 
-    Make frequency (lightcone) boxes of density, ionized fractions, 
+    '''
+    Make frequency (lightcone) boxes of density, ionized fractions,
     and brightness temperature. The function reads xfrac and density
-    files from the specified directories and combines them into a 
+    files from the specified directories and combines them into a
     lighcone box going from z_low to z_high.
-    
-    This routine is more or less a direct translation of Garrelt's 
+
+    This routine is more or less a direct translation of Garrelt's
     IDL routine.
-    
-    Parameters: 
+
+    Parameters:
         * xfrac_dir (string): directory containing xfrac files
         * dens_dir (string): directory containing density files
         * z_low (float): lowest redshift to include
         * z_high (float): highest redshift to include.
 
-    Returns: 
+    Returns:
         Tuple with (density box, xfrac box, dt box, redshifts), where
         density box, xfrac box and dt box are numpy arrays containing
-        the lightcone quantities. redshifts is an array containing the 
+        the lightcone quantities. redshifts is an array containing the
         redshift for each slice.
-        
+
     .. note::
         Since this function relies on filenames to get redshifts,
         all the data files must follow the common naming convenstions.
         Ionization files must be named xfrac3d_z.bin and densityfiles
         zn_all.dat
-        
+
     .. note::
         The make_lightcone method is meant to replace this method. It
         is more general and easier to use.
-    
+
     Example:
         Make a lightcone cube ranging from z = 7 to z = 8:
-    
+
         >>> xfrac_dir = '/path/to/data/xfracs/'
         >>> dens_dir = '/path/to/data/density/'
         >>> xcube, dcube, dtcube, z = c2t.freq_box(xfrac_dir, density_dir, z_low=7.0, z_high=8.)
-        
+
     '''
 
     #Get the list of redshifts where we have simulation output files
@@ -81,7 +81,7 @@ def freq_box(xfrac_dir, dens_dir, z_low, z_high):
     xfrac_lightcone = np.zeros((mesh_size[0], mesh_size[1], len(output_z)))
     dens_lightcone = np.zeros_like(xfrac_lightcone)
     dt_lightcone = np.zeros_like(xfrac_lightcone)
-    
+
     for z in output_z:
         #Find the output files that bracket the redshift
         z_bracket_low_new = dens_redshifts[dens_redshifts <= z][0]
@@ -98,9 +98,9 @@ def freq_box(xfrac_dir, dens_dir, z_low, z_high):
             xfrac_file_high = XfracFile(os.path.join(xfrac_dir, 'xfrac3d_%.3f.bin' % z_bracket_high))
             dens_file_high = DensityFile(os.path.join(dens_dir, '%.3fn_all.dat' % z_bracket_high))
             dt_cube_high = calc_dt(xfrac_file_high, dens_file_high)
-            
+
         slice_ind = comoving_pos_idx % xfrac_file_high.mesh_x
-        
+
         #Ionized fraction
         xi_interp = _get_interp_slice(xfrac_file_high.xi, xfrac_file_low.xi, z_bracket_high, \
                                     z_bracket_low, z, comoving_pos_idx)
@@ -128,6 +128,6 @@ def read_binary_with_meshinfo(filename, bits=32, order='C'):
 
 def save_binary_with_meshinfo(filename, data, bits=32, order='C'):
     save_cbin(filename, data, bits, order)
-    
+
 def smooth(input_array, sigma):
-    return smoothing.smooth_gauss(input_array, sigma) 
+    return smoothing.smooth_gauss(input_array, sigma)

@@ -1,14 +1,14 @@
 #Various functions for calculating some cosmological stuff
-import const
+from . import const
 import numpy as np
 from scipy.integrate import quadrature
 from scipy.interpolate import interp1d
-from helper_functions import outputify
+from .helper_functions import outputify
 
 #Precalculated table of comoving distances at various redshifts
 precalc_table_z = np.hstack((np.arange(0,1,0.02), 10**np.linspace(0,2,200)))
 precalc_table_cdist = np.array([   0.  ,     85.36535896,    170.02599243,
-          253.97218821,    337.19503137,    419.68640492,    501.43898711,    
+          253.97218821,    337.19503137,    419.68640492,    501.43898711,
           582.44624565,    662.70242885,    742.20255458,    820.94239486,
           898.91846116,    976.12798514,   1052.56889863,   1128.2398119 ,
          1203.13999048,   1277.26933099,   1350.6283359 ,   1423.21808737,
@@ -72,7 +72,7 @@ precalc_table_cdist = np.array([   0.  ,     85.36535896,    170.02599243,
         13083.39514428,  13102.73405492,  13121.8573761 ,  13140.76734823])
 
 def _ldist(z):
-    # This function is used for the integration in luminosity_distance  
+    # This function is used for the integration in luminosity_distance
     # Only meant for internal use.
     term1 = (1+z)**2
     term2 =  1.+2.*(const.q0+const.lam)*z
@@ -92,11 +92,11 @@ def _ldist(z):
 
 def luminosity_distance(z, k=0):
     ''' Calculate the luminosity distance for a given redshift.
-    
+
     Parameters:
         * z (float or array): the redshift(s)
         * k = 0 (float): the curvature constant.
-        
+
     Returns:
         The luminosity distance in Mpc
      '''
@@ -106,12 +106,12 @@ def luminosity_distance(z, k=0):
     n = len(z)
 
     if const.lam == 0:
-        denom = np.sqrt(1+2*const.q0*z) + 1 + const.q0*z 
+        denom = np.sqrt(1+2*const.q0*z) + 1 + const.q0*z
         dlum = (const.c*z/const.H0)*(1 + z*(1-const.q0)/denom)
         return dlum
     else:
         dlum = np.zeros(n)
-        for i in xrange(n):
+        for i in range(n):
             if z[i] <= 0:
                 dlum[i] = 0.0
             else:
@@ -125,7 +125,7 @@ def luminosity_distance(z, k=0):
 
 
 def z_to_cdist(z):
-    ''' Calculate the comoving distance 
+    ''' Calculate the comoving distance
 
     Parameters:
         z (float or array): redshift
@@ -142,7 +142,7 @@ def z_to_cdist(z):
 
 
 def cdist_to_z(dist):
-    ''' Calculate the redshift correspoding to the given redshift. 
+    ''' Calculate the redshift correspoding to the given redshift.
 
     Parameters:
         * dist (float or array): the distance in comoving Mpc
@@ -151,9 +151,9 @@ def cdist_to_z(dist):
         redshift corresponding to the distance.
 
         .. note::
-            Uses a precalculated table for interpolation. Only valid for 
-            0 <= z < 100 
-        
+            Uses a precalculated table for interpolation. Only valid for
+            0 <= z < 100
+
     '''
     dist = np.atleast_1d(dist)
     z = np.zeros_like(dist)
@@ -167,14 +167,14 @@ def cdist_to_z(dist):
 def angular_size(dl, z):
     ''' Calculate the angular size of an object at a given
     redshift.
-    
+
     Parameters:
         * dl (float or array): the physical size in kpc
         * z (float or array): the redshift of the object
-        
+
     Returns:
-        The angluar size in arcseconds 
-        
+        The angluar size in arcseconds
+
     '''
 
     angle = 180./(3.1415)*3600.*dl*(1+z)**2/(1000*luminosity_distance(z))
@@ -185,15 +185,15 @@ def angular_size_comoving(cMpc, z):
     '''
     Calculate the angular size in degrees of an object with a given
     comoving size.
-    
+
     Parameters:
         * cMpc (float or array): the size in comoving Mpc
         * z (float or array): the redshift of the object
-        
+
     Returns:
         The angular size in degrees
     '''
-    
+
     pkpc = c_to_p(cMpc, z)*1000.
     arcsec = angular_size(pkpc, z)
     return arcsec/60./60.
@@ -203,11 +203,11 @@ def deg_to_cdist(deg, z):
     '''
     Calculate the size in cMpc of an object
     with given angular diameter.
-    
+
     Parameters:
         * deg (float or array): the size in degrees
         * z (float or array): the redshift
-        
+
     Returns:
         The size in cMpc
     '''
@@ -215,27 +215,27 @@ def deg_to_cdist(deg, z):
 
 
 def nu_to_z(nu21):
-    ''' Convert 21 cm frequency in MHz to redshift 
+    ''' Convert 21 cm frequency in MHz to redshift
 
     Parameters:
         * nu21 (float or array): redshifted 21 cm frequency in MHz
 
     Returns:
         Redshift
-        
+
     '''
     return const.nu0/nu21-1
 
 
 def z_to_nu(z):
-    ''' Get the 21 cm frequency that corresponds to redshift z 
+    ''' Get the 21 cm frequency that corresponds to redshift z
 
     Parameters:
         * z (float or array): redshift
 
     Returns:
         redshifted 21 cm frequency in MHz
-        
+
     '''
     return const.nu0/(1.+z)
 
@@ -243,10 +243,10 @@ def z_to_nu(z):
 def nu_to_wavel(nu):
     '''
     Convert frequency to wavelength
-    
+
     Parameters:
         * nu (float or array): the frequency in MHz
-        
+
     Returns:
         The wavelength in meters
     '''
@@ -254,27 +254,27 @@ def nu_to_wavel(nu):
 
 
 def nu_to_cdist(nu21):
-    ''' Calculate the comoving distance to a given 21 cm frequency 
+    ''' Calculate the comoving distance to a given 21 cm frequency
 
     Parameters:
         * nu21 (float or array): redshifted 21 cm frequency in MHz
 
     Returns:
         Comoving distance in Mpc
-    
+
     '''
     redsh = nu_to_z(nu21)
     return z_to_cdist(redsh)
 
-    
+
 def c_to_p(z_to_cdist, z):
     '''
     Convert comoving distance to proper distance
-    
+
     Parameters:
         * z_to_cdist: The comoving distance
         * z: the redshift
-        
+
     Returns:
         Proper distance
     '''
@@ -284,14 +284,13 @@ def c_to_p(z_to_cdist, z):
 def p_to_c(pdist, z):
     '''
     Convert proper distance to comoving distance
-    
+
     Parameters:
         * pdist: The proper distance
         * z: the redshift
-        
+
     Returns:
         Comoving distance
     '''
-    
-    return pdist*(1+z)
 
+    return pdist*(1+z)

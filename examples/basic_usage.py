@@ -33,32 +33,32 @@ dfile = c2t.DensityFile(density_filename)
 
 #The density file object contains various useful properties, such as the 
 #redshift, the mesh size and the actual density. 
-print 'The redshift is ', dfile.z
-print 'The size of the mesh is (', dfile.mesh_x, dfile.mesh_y, dfile.mesh_z, ')'
-print 'The mean baryon density is ', dfile.cgs_density.mean(), ' g/cm^3'
-print 'The critical baryon density of the universe is: ', c2t.rho_crit_0*c2t.OmegaB, ' g/cm^3'
+print('The redshift is ', dfile.z)
+print('The size of the mesh is (', dfile.mesh_x, dfile.mesh_y, dfile.mesh_z, ')')
+print('The mean baryon density is ', dfile.cgs_density.mean(), ' g/cm^3')
+print('The critical baryon density of the universe is: ', c2t.rho_crit_0*c2t.OmegaB, ' g/cm^3')
 
 #You can also access the density in simulation units
-print 'The raw density at point (0,0,0) is ', dfile.raw_density[0,0,0]
+print('The raw density at point (0,0,0) is ', dfile.raw_density[0,0,0])
 
 #Read an ionized fractions file and store it as an XfracFile object
 xfile = c2t.XfracFile(xfrac_filename)
 
 #The most important property of an XfracFile object is xi, which
 #is a numpy array containing the ionized fraction
-print 'The ionized fraction in point (10,223,45) is: ', xfile.xi[10,223,45]
-print 'The volume-averaged mean ionized fraction is: ', xfile.xi.mean()
+print('The ionized fraction in point (10,223,45) is: ', xfile.xi[10,223,45])
+print('The volume-averaged mean ionized fraction is: ', xfile.xi.mean())
 
 #c2raytools has several methods to calculate useful statistics, such as 
 #mass-weighted mean ionized fraction
-print 'The mass-averaged mean ionized fraction is:', c2t.mass_weighted_mean_xi(xfile.xi, dfile.raw_density)
+print('The mass-averaged mean ionized fraction is:', c2t.mass_weighted_mean_xi(xfile.xi, dfile.raw_density))
 
 #Read a velocity data file and store it as a VelocityFile object
 vfile = c2t.VelocityFile(velocity_filename)
 
 #Since the velocity data is actually momentum, we need the density to convert it to km/s 
 kms = vfile.get_kms_from_density(dfile)
-print 'Gas velocity at cell (100,100,100) is ', kms[:,100,100,100], 'km/s'
+print('Gas velocity at cell (100,100,100) is ', kms[:,100,100,100], 'km/s')
 
 #Calculate neutral hydrogen number density
 n_hi = dfile.cgs_density*xfile.xi/c2t.m_p

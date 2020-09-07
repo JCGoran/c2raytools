@@ -11,7 +11,7 @@ Mpc = 1e6*pc
 G_grav = 6.6732e-8
 m_p = 1.672661e-24 #g
 mean_molecular = abu_h+4.0*abu_he
-abu_he_mass = 0.2486 
+abu_he_mass = 0.2486
 abu_h_mass = 1.0-abu_he_mass
 mean_molecular = 1.0/(1.0-abu_he_mass)
 solar_masses_per_gram = 5.02785431e-34
@@ -26,11 +26,11 @@ H0 = 100.0*h
 H0cgs = H0*1e5/Mpc
 rho_crit_0 = 3.0*H0cgs*H0cgs/(8.0*np.pi*G_grav)
 q0 = 0.5*Omega0- lam
-rho_matter = rho_crit_0*Omega0  
+rho_matter = rho_crit_0*Omega0
 Tcmb0=2.725
 
 #Redshift dependent Hubble parameter, km/s/Mpc
-Hz = lambda z: H0*np.sqrt(Omega0*(1.0+z)**3.+lam) 
+Hz = lambda z: H0*np.sqrt(Omega0*(1.0+z)**3.+lam)
 
 #21 cm stuff
 A10 = 2.85e-15

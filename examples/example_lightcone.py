@@ -39,7 +39,7 @@ density_lightcone, z = c2t.make_lightcone(density_files, z_low = 7.059, z_high =
 #If you already have a bunch of dT files, you can make a lightcone directly
 #using the make_lightcone method
 dt_lightcone = c2t.calc_dt_lightcone(xfrac_lightcone, density_lightcone, lowest_z = z.min())
-print dt_lightcone.shape
+print(dt_lightcone.shape)
 
 #Calculate the mean dT along the line-of-sight of the lightcone
 dT_mean = c2t.apply_func_along_los(dt_lightcone, func=np.mean, los_axis=2)
